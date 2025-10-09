@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import encrypt from "mongoose-encryption"; // Correct import
+import encrypt from "mongoose-encryption";
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-const secretMessage = "Thisisourlittlesecret";
-userSchema.plugin(encrypt, { secret: secretMessage, encryptedFields: ["password"] });
+
+userSchema.plugin(encrypt, { secret: process.env.SECRET_MESSAGE, encryptedFields: ["password"] });
 
 export const User = mongoose.model("User", userSchema);
