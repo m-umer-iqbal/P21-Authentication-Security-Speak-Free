@@ -3,7 +3,7 @@ import express from "express"
 import bodyParser from "body-parser"
 import mongoose from "mongoose";
 import { User } from "./models/user.js";
-import md5 from 'md5';
+// import md5 from 'md5';
 import ejs from 'ejs';
 import bcrypt from 'bcrypt';
 
@@ -60,12 +60,14 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
     const foundUser = await User.findOne({ email: req.body.username })
     if (foundUser) {
-        if (foundUser.password === md5(req.body.password)) {
-            res.render("secrets")
-        } else {
-            error = "Invalid Password";
-            res.redirect("/login");
-        }
+        bcrypt.compare(req.body.password, foundUser.password, function (err, result) {
+            if (result === true) {
+                res.render("secrets")
+            } else {
+                error = "Invalid Password";
+                res.redirect("/login");
+            }
+        });
     } else {
         error = "Invalid Username";
         res.redirect("/login");
