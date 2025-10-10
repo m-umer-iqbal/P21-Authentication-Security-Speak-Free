@@ -3,6 +3,11 @@ import express from "express"
 import bodyParser from "body-parser"
 import mongoose from "mongoose";
 import { User } from "./models/user.js";
+import md5 from 'md5';
+import ejs from 'ejs';
+import bcrypt from 'bcrypt';
+
+const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
 const app = express()
 const port = 3000
@@ -33,14 +38,20 @@ app.get('/register', (req, res) => {
     error = ""
 })
 
+app.get('/logout', (req, res) => {
+    res.redirect('/')
+})
+
 app.post('/register', async (req, res) => {
     try {
-        const newUser = new User({
-            email: req.body.username,
-            password: req.body.password
+        bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
+            const newUser = new User({
+                email: req.body.username,
+                password: hash
+            });
+            await newUser.save();
+            res.render("secrets")
         });
-        await newUser.save();
-        res.render("secrets")
     } catch (err) {
         res.render("error", { error: err.message })
     }
@@ -49,7 +60,7 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
     const foundUser = await User.findOne({ email: req.body.username })
     if (foundUser) {
-        if (foundUser.password === req.body.password) {
+        if (foundUser.password === md5(req.body.password)) {
             res.render("secrets")
         } else {
             error = "Invalid Password";
