@@ -3,9 +3,10 @@ import express from "express"
 import bodyParser from "body-parser"
 import mongoose from "mongoose";
 import { User } from "./models/user.js";
-// import md5 from 'md5';
-import ejs from 'ejs';
 import bcrypt from 'bcrypt';
+import session from 'express-session';
+import passport from 'passport';
+import passportLocalMongoose from 'passport-local-mongoose';
 
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
