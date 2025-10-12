@@ -1,19 +1,10 @@
 import mongoose from "mongoose";
-// import encrypt from "mongoose-encryption"; This line is for encrypting password field using mongoose-encryption package
+import passportLocalMongoose from "passport-local-mongoose";
 
 const userSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
+    // you can add fields like email later if you want
 });
 
-
-// userSchema.plugin(encrypt, { secret: process.env.SECRET_MESSAGE, encryptedFields: ["password"] }); This line is for encrypting password field using mongoose-encryption package
+userSchema.plugin(passportLocalMongoose);
 
 export const User = mongoose.model("User", userSchema);
