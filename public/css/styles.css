@@ -17,3 +17,50 @@ body {
 .hover-underline:hover {
   text-decoration: underline !important;
 }
+
+/* Override Bootstrap Social button layout */
+.btn-social {
+  position: relative;
+  padding-left: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 1rem;
+  border: none;
+  color: #fff;
+}
+
+/* Fix the icon alignment issue */
+.btn-social > i {
+  margin-right: 10px;
+  font-size: 1.3rem;
+}
+
+/* Remove the weird left color box Bootstrap Social adds */
+.btn-social > :first-child {
+  position: static !important;
+  left: 0 !important;
+  width: auto !important;
+  line-height: inherit !important;
+  border-right: none !important;
+  padding: 0 !important;
+  height: auto !important;
+}
+
+/* Brand colors */
+.btn-google {
+  background-color: #db4437;
+}
+
+.btn-google:hover {
+  background-color: #c23321;
+}
+
+.btn-facebook {
+  background-color: #3b5998;
+}
+
+.btn-facebook:hover {
+  background-color: #324b84;
+}

@@ -4,7 +4,7 @@
     <div class="container d-flex justify-content-center py-5">
       <div class="row w-100 justify-content-center">
         <div class="col-md-6 col-lg-5">
-          <div class="card shadow-lg border-0 rounded-3">
+          <div class="card shadow-lg border-0 rounded-3 mb-4">
             <div class="card-header bg-dark text-white text-center py-4 rounded-top-3">
               <h1 class="h3 mb-0">Login</h1>
               <p class="mb-0 mt-2 opacity-75">Access your Secrets account</p>
@@ -29,24 +29,29 @@
                 </div>
               </form>
               <div class="text-center mt-4">
-                <p class="mb-0">Don't have an account? <a href="/register"
-                    class="text-decoration-none fw-semibold hover-underline">Register</a></p>
+                <p class="mb-0">Don't have an account?
+                  <a href="/register" class="text-decoration-none fw-semibold hover-underline">Register</a>
+                </p>
               </div>
             </div>
           </div>
+
+          <!-- Social Login Buttons -->
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body text-center">
+              <a href="/auth/google" class="btn btn-social btn-google w-100 mb-3">
+                <i class="fab fa-google me-2"></i> Sign In with Google
+              </a>
+              <a href="/auth/facebook" class="btn btn-social btn-facebook w-100">
+                <i class="fab fa-facebook-f me-2"></i> Sign In with Facebook
+              </a>
+            </div>
+          </div>
+
+
+          <!-- Home Button -->
           <%- include("partials/homeBtn") %>
         </div>
-        <!-- <div class="col-sm-4">
-      <div class="card">
-        <div class="card-body">
-          <a class="btn btn-block" href="/auth/google" role="button">
-            <i class="fab fa-google"></i>
-            Sign In with Google
-          </a>
-        </div>
-      </div>
-    </div> -->
-
       </div>
     </div>
 
