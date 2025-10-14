@@ -5,10 +5,8 @@ import mongoose from "mongoose";
 import { User } from "./models/user.js";
 import session from 'express-session';
 import passport from 'passport';
-import passportLocalMongoose from 'passport-local-mongoose';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
-import findOrCreate from 'mongoose-findorcreate';
 
 const app = express()
 const port = 3000
@@ -42,7 +40,6 @@ passport.deserializeUser(async (id, done) => {
         done(err, null);
     }
 });
-
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -93,7 +90,6 @@ app.get('/auth/google',
     })
 );
 
-
 app.get('/auth/google/secrets',
     passport.authenticate('google', { failureRedirect: '/login' }),
     function (req, res) {
@@ -120,9 +116,12 @@ app.get('/login', (req, res) => {
     error = ""
 })
 
-app.get('/secrets', (req, res) => {
+app.get('/secrets', async (req, res) => {
     if (req.isAuthenticated()) {
-        res.render("secrets")
+        const usersFound = await User.find({ "secret": { $ne: null } });
+        if (usersFound) {
+            res.render("secrets", { usersWithSecrets: usersFound })
+        }
     } else {
         res.redirect("/login")
     }
@@ -165,6 +164,24 @@ app.post('/login', async (req, res) => {
         }
     })
 })
+
+app.get('/submit', async (req, res) => {
+    if (req.isAuthenticated()) {
+        res.render("submit")
+    } else {
+        res.redirect("/login");
+    }
+});
+
+app.post('/submit', async (req, res) => {
+    const secret = req.body.secret;
+    const userFound = await User.findById(req.user.id);
+    if (userFound) {
+        userFound.secret = secret;
+        await userFound.save();
+        res.redirect("/secrets");
+    }
+});
 
 app.listen(port, () => {
     console.log(`http://localhost:${port}`)

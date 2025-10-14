@@ -4,7 +4,8 @@ import findOrCreate from "mongoose-findorcreate";
 
 const userSchema = new mongoose.Schema({
     googleId: { type: String, unique: true, sparse: true }, // for Google login users
-    facebookId: { type: String, unique: true, sparse: true } // for Facebook login users
+    facebookId: { type: String, unique: true, sparse: true }, // for Facebook login users
+    secret: String
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameUnique: false });
