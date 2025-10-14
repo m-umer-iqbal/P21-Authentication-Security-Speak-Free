@@ -3,7 +3,8 @@ import passportLocalMongoose from "passport-local-mongoose";
 import findOrCreate from "mongoose-findorcreate";
 
 const userSchema = new mongoose.Schema({
-    googleId: { type: String, unique: true, sparse: true } // for Google login users
+    googleId: { type: String, unique: true, sparse: true }, // for Google login users
+    facebookId: { type: String, unique: true, sparse: true } // for Facebook login users
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameUnique: false });

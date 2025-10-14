@@ -7,6 +7,7 @@ import session from 'express-session';
 import passport from 'passport';
 import passportLocalMongoose from 'passport-local-mongoose';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as FacebookStrategy } from 'passport-facebook';
 import findOrCreate from 'mongoose-findorcreate';
 
 const app = express()
@@ -59,8 +60,25 @@ passport.use(new GoogleStrategy({
         } catch (err) {
             return cb(err);
         }
-    }));
+    })
+);
 
+passport.use(new FacebookStrategy({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/auth/facebook/secrets"
+},
+    async function (accessToken, refreshToken, profile, cb) {
+        try {
+            let user = await User.findOne({ facebookId: profile.id });
+            if (!user) {
+                user = await User.create({ facebookId: profile.id });
+            }
+            return cb(null, user);
+        } catch (err) {
+            return cb(err);
+        }
+    }));
 
 let error = "";
 
@@ -82,6 +100,16 @@ app.get('/auth/google/secrets',
         res.redirect('/secrets');
     }
 );
+
+app.get('/auth/facebook',
+    passport.authenticate('facebook'));
+
+app.get('/auth/facebook/secrets',
+    passport.authenticate('facebook', { failureRedirect: '/login' }),
+    function (req, res) {
+        // Successful authentication, redirect secrets page.
+        res.redirect('/secrets');
+    });
 
 app.get('/register', (req, res) => {
     res.render('register')
