@@ -24,7 +24,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/Secret-Project")
+mongoose.connect("mongodb://localhost:27017/speakFreeDB")
     .then(() => console.log("Connected to DB"))
     .catch(err => console.log("Error in connecting database:" + err.message));
 
