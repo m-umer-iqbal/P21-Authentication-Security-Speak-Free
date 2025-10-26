@@ -16,7 +16,7 @@ app.use(express.static("public"))
 app.set('view engine', 'ejs');
 
 app.use(session({
-    secret: 'Our Little Secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
 }))
@@ -118,7 +118,7 @@ app.get('/login', (req, res) => {
 
 app.get('/secrets', async (req, res) => {
     if (req.isAuthenticated()) {
-        const usersFound = await User.find({ "secret": { $ne: null } });
+        const usersFound = await User.find({ "secrets": { $ne: null } });
         if (usersFound) {
             res.render("secrets", { usersWithSecrets: usersFound })
         }
@@ -177,9 +177,11 @@ app.post('/submit', async (req, res) => {
     const secret = req.body.secret;
     const userFound = await User.findById(req.user.id);
     if (userFound) {
-        userFound.secret = secret;
+        userFound.secrets.push({ secretContent: secret });
         await userFound.save();
         res.redirect("/secrets");
+    } else {
+        res.redirect("/login");
     }
 });
 
