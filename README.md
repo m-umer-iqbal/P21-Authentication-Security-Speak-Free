@@ -74,10 +74,11 @@ npm install
 3. Set up environment variables
 Create a .env file in the root directory and add your credentials:
 ```MONGO
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-FACEBOOK_APP_ID=
-FACEBOOK_APP_SECRET=
+SESSION_SECRET=<your_session_secret>
+GOOGLE_CLIENT_ID=<your_google_client_id>
+GOOGLE_CLIENT_SECRET=<your_google_client_secret>
+FACEBOOK_APP_ID=<your_facebook_app_id>
+FACEBOOK_APP_SECRET=<your_facebook_app_secret>
 ```
 4. Run the application
 ```bash
