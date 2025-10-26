@@ -113,7 +113,7 @@ app.get('/register', (req, res) => {
 
 app.get('/login', (req, res) => {
     res.render('login', { error: error })
-    error = ""
+    // error = ""
 })
 
 app.get('/secrets', async (req, res) => {
@@ -148,22 +148,22 @@ app.post('/register', (req, res) => {
 });
 
 
-app.post('/login', async (req, res) => {
-    const user = new User({
-        username: req.body.username,
-        password: req.body.password
-    })
-    req.login(user, (err) => {
+app.post('/login', (req, res) => {
+    passport.authenticate('local', (err, user, info) => {
         if (err) {
-            error = err.message;
-            res.redirect("/login");
-        } else {
-            passport.authenticate("local")(req, res, () => {
-                res.redirect("/secrets")
-            })
+            return res.render('login', { error: err.message });
         }
-    })
-})
+        if (!user) {
+            return res.render('login', { error: 'Invalid username or password' });
+        }
+        req.login(user, (err) => {
+            if (err) {
+                return res.render('login', { error: err.message });
+            }
+            return res.redirect('/secrets');
+        });
+    })(req, res);
+});
 
 app.get('/submit', async (req, res) => {
     if (req.isAuthenticated()) {
